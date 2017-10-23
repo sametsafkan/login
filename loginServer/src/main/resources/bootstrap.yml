@@ -1,0 +1,8 @@
+spring: 
+  profiles: 
+    active: login
+  application:
+    name: login-server
+  cloud: 
+    config: 
+      uri: http://localhost:8001

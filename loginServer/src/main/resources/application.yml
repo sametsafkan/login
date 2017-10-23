@@ -1,0 +1,8 @@
+server: 
+  port: ${PORT:${SERVER_PORT:0}}   # Select any available port if neither port nor server port are specified. 
+spring: 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
