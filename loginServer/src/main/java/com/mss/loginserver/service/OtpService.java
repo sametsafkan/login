@@ -1,18 +1,19 @@
 package com.mss.loginserver.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mss.loginserver.request.RequestSendOtp;
+import com.mss.loginserver.request.RequestByClientNumber;
 
 /**
  * 
  * @author sametsafkan
  *
  */
-@Service
-public class OtpService {
+@FeignClient("OTP-SERVICE")
+public interface OtpService {
 
-	public void sendOtp(RequestSendOtp request) {
-		System.out.println(request.getClientNumber() + "Otp Gönderildi");
-	}
+	@RequestMapping("/")
+	public void sendOtp(@RequestBody RequestByClientNumber request);
 }
