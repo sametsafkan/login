@@ -4,3 +4,4 @@ zuul:
   prefix: /services
   routes:
     login-server: /login-server/**
+    otp-service: /otp-service/**
