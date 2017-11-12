@@ -5,3 +5,4 @@ zuul:
   routes:
     login-server: /login-server/**
     otp-service: /otp-service/**
+    token-service: /token-service/**
