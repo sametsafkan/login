@@ -23,6 +23,9 @@ public class PostFilter extends ZuulFilter{
 		this.tokenService = tokenService;
 	}
 	
+	public PostFilter() {
+	}
+	
 	@Override
 	public Object run() {
 		RequestContext ctx = RequestContext.getCurrentContext();
@@ -41,7 +44,7 @@ public class PostFilter extends ZuulFilter{
 	@Override
 	public int filterOrder() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override

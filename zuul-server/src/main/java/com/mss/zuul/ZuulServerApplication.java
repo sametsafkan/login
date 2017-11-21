@@ -26,4 +26,9 @@ public class ZuulServerApplication {
 	public PreFilter simpleFilter() {
 		return new PreFilter();
 	}
+	
+	@Bean 
+	public PostFilter postFilter() {
+		return new PostFilter();
+	}
 }
