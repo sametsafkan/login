@@ -35,21 +35,9 @@ public class ValidateService {
 
 	public ResponseValidateLogin validateLogin(RequestValidateLogin requestValidateLogin) {
 		ResponseValidateLogin response = new ResponseValidateLogin();
-		Object waitMonitor = new Object();
 		RequestPasswordCheck requestPasswordCheck = new RequestPasswordCheck(requestValidateLogin.getClientNumber(), requestValidateLogin.getPassword());
 		RequestCheckChannel requestCheckChannel = new RequestCheckChannel(requestValidateLogin.getClientNumber(), requestValidateLogin.getChannel());
-		synchronized (waitMonitor) {
-			checkChannel(requestCheckChannel);
-			checkPassword(requestPasswordCheck);
-			while (true) {
-				if (channelValidation && passwordValidation) {
-					synchronized (waitMonitor) {
-						waitMonitor.notify();
-					}
-					break;
-				}
-			}
-		}
+		Observable.merge(checkChannel(requestCheckChannel), checkPassword(requestPasswordCheck)).blockingSubscribe();
 		System.out.println(responseCheckUserChannel.isChannelOk());
 		System.out.println(responseCheckPassword.isPasswordOk());
 		if(responseCheckUserChannel.isChannelOk() & responseCheckPassword.isPasswordOk())
@@ -59,41 +47,22 @@ public class ValidateService {
 		return response;
 	}
 
-	private void checkChannel(RequestCheckChannel request) {
+	private Observable<RequestCheckChannel> checkChannel(RequestCheckChannel request) {
 		Observable<RequestCheckChannel> todoObservable = Observable.just(request);
-		todoObservable.subscribeOn(Schedulers.newThread()).subscribe(
+		todoObservable.subscribeOn(Schedulers.newThread()).doOnNext(
 				// onNext
 				(requestChannel) -> {
 					responseCheckUserChannel = channelService.CheckUserChannel(requestChannel);
-				},
-				// onError
-				(t) -> {
-					channelValidation = true;
-					t.printStackTrace();
-				},
-				// onCompleted
-				() -> {
-					System.out.println("Completed");
-					channelValidation = true;
 				});
+		return todoObservable;
 	}
 
-	private void checkPassword(RequestPasswordCheck request) {
+	private Observable<RequestPasswordCheck> checkPassword(RequestPasswordCheck request) {
 		Observable<RequestPasswordCheck> passwordObservable = Observable.just(request);
-		passwordObservable.subscribeOn(Schedulers.newThread()).subscribe(
-				// onNext
+		passwordObservable.subscribeOn(Schedulers.newThread()).doOnNext(
 				(requestPassword) -> {
 					responseCheckPassword = passwordService.checkPassword(requestPassword);
-				},
-				// onError
-				(t) -> {
-					passwordValidation = true;
-					t.printStackTrace();
-				},
-				// onCompleted
-				() -> {
-					System.out.println("Password Completed");
-					passwordValidation = true;
 				});
+		return passwordObservable;
 	}
 }
