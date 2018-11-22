@@ -35,7 +35,7 @@ public class LoginController {
 		request.setClientNumber(userName);
 		request.setPassword(password);
 		request.setChannel("INT");
-		ResponseLogin isLogin = login.login(request);//login.login(request);
+		ResponseLogin isLogin = login.login(request);
 		if("1".equals(isLogin.getIsLogin()))
 			return "login-success";
 		else
