@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mss.login.intf.LoginService;
 import com.mss.login.request.RequestLogin;
 import com.mss.login.response.ResponseLogin;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 /**
  * 
  * @author sametsafkan

@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mss.loginserver.entity.CustomerEntity;
 import com.mss.loginserver.repository.CustomerRepository;
-import com.mss.loginserver.request.RequestByClientNumber;
 import com.mss.loginserver.request.RequestLogin;
 import com.mss.loginserver.request.RequestLoginUser;
 import com.mss.loginserver.response.ResponseLogin;
 import com.mss.loginserver.service.LoginService;
-import com.mss.loginserver.service.OtpService;
 
 @RestController
 public class LoginController {
@@ -26,14 +24,12 @@ public class LoginController {
 	@Autowired
 	CustomerRepository customerRepository;
 	private final RabbitTemplate rabbitTemplate;
-	private final OtpService otpService;
 	
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public ResponseLogin login(@RequestBody RequestLogin request) {
 		RequestLoginUser requestLoginUser = new RequestLoginUser(request.getClientNumber(), request.getPassword(), request.getChannel());
 		ResponseLogin reponse = login.login(requestLoginUser);
-		RequestByClientNumber requestSendOtp = new RequestByClientNumber(request.getClientNumber());
-		rabbitTemplate.convertAndSend(LoginServerApplication.queueName, requestSendOtp);
+		rabbitTemplate.convertAndSend(LoginServerApplication.queueName, request.getClientNumber());
 		return reponse;
 	}
 	@RequestMapping(value="/")
@@ -42,8 +38,7 @@ public class LoginController {
 	}
 	
 	@Autowired
-	public LoginController(RabbitTemplate rabbitTemplate, OtpService otpService) {
+	public LoginController(RabbitTemplate rabbitTemplate) {
 		this.rabbitTemplate = rabbitTemplate;
-		this.otpService = otpService;
 	}
 }

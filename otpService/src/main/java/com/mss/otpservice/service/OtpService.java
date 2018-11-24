@@ -15,7 +15,7 @@ import com.mss.otpservice.request.RequestByClientNumber;
 public class OtpService {
 
 	@RequestMapping("/")
-	public void sendOtp(@RequestBody RequestByClientNumber request) {
-		System.out.println(request.getClientNumber() + " numaralı müşteriye otp gönderildi");
+	public void sendOtp(@RequestBody Integer clientNo) {
+		System.out.println(clientNo + " numaralı müşteriye otp gönderildi");
 	}
 }
