@@ -1,9 +1,10 @@
 package com.mss.loginserver.repository;
 
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mss.loginserver.entity.PasswordEntity;
+import com.mss.loginserver.domain.Password;
 
 /**
  * 
@@ -11,6 +12,6 @@ import com.mss.loginserver.entity.PasswordEntity;
  *
  */
 @Repository
-public interface PasswordRepository extends CrudRepository<PasswordEntity, Long> {
+public interface PasswordRepository extends ReactiveMongoRepository<Password, String> {
 
 }

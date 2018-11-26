@@ -1,28 +1,26 @@
-package com.mss.loginserver.entity;
+package com.mss.loginserver.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 
  * @author sametsafkan
  *
  */
-@Entity
-public class ChannelEntity {
+@Document(collection = "Channel")
+public class Channel {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 	private Integer clientNumber;
 	private String channel;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -42,12 +40,12 @@ public class ChannelEntity {
 		this.channel = channel;
 	}
 
-	public ChannelEntity(Integer clientNumber, String channel) {
+	public Channel(Integer clientNumber, String channel) {
 		this.clientNumber = clientNumber;
 		this.channel = channel;
 	}
 
-	public ChannelEntity() {
+	public Channel() {
 
 	}
 }

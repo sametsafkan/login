@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mss.login.intf.LoginService;
 import com.mss.login.request.RequestLogin;
 import com.mss.login.response.ResponseLogin;
-import com.netflix.appinfo.InstanceInfo;
-import com.netflix.discovery.EurekaClient;
+
+import reactor.core.publisher.Mono;
 /**
  * 
  * @author sametsafkan
@@ -31,17 +31,20 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/login.do")
-	public String login(@RequestParam("userName") Integer userName ,   
+	public Mono<String> login(@RequestParam("userName") Integer userName ,   
             			  @RequestParam("password") String password) {
 		RequestLogin request = new RequestLogin();
 		request.setClientNumber(userName);
 		request.setPassword(password);
 		request.setChannel("INT");
-		ResponseLogin isLogin = login.login(request);
-		if("1".equals(isLogin.getIsLogin()))
-			return "login-success";
-		else
-			return "login-fail";
+		Mono<ResponseLogin> responseMono = login.login(request);
+	    return responseMono.map(m -> {
+			if(m.getIsLogin()) {
+				return "login-success";
+			}else {
+				return "login-fail";
+			}
+		});
 	}
 	
 	@Autowired

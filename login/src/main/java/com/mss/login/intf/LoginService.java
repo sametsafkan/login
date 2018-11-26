@@ -2,6 +2,8 @@ package com.mss.login.intf;
 
 import com.mss.login.request.RequestLogin;
 import com.mss.login.response.ResponseLogin;
+
+import reactor.core.publisher.Mono;
 /**
  * 
  * @author sametsafkan
@@ -9,5 +11,5 @@ import com.mss.login.response.ResponseLogin;
  */
 public interface LoginService {
 
-	ResponseLogin login(RequestLogin request);
+	Mono<ResponseLogin> login(RequestLogin request);
 }

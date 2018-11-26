@@ -1,17 +1,17 @@
 package com.mss.loginserver.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-import com.mss.loginserver.entity.ChannelEntity;
+import com.mss.loginserver.domain.Channel;
+
+import reactor.core.publisher.Mono;
 
 /**
  * 
  * @author sametsafkan
  *
  */
-@Repository
-public interface ChannelRepository extends CrudRepository<ChannelEntity, Long> {
+public interface ChannelRepository extends ReactiveMongoRepository<Channel, String> {
 
-	public ChannelEntity findByClientNumberAndChannel(Integer clientNumber, String channel);
+	Mono<Channel> findByClientNumberAndChannel(Integer clientNumber, String channel);
 }

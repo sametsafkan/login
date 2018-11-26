@@ -1,19 +1,14 @@
 package com.mss.loginserver.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseLogin {
 
-	String isLogin;
+	boolean isLogin;
 
-	public String getIsLogin() {
+	public boolean getIsLogin() {
 		return isLogin;
 	}
 
-	public void setIsLogin(String isLogin) {
+	public void setIsLogin(boolean isLogin) {
 		this.isLogin = isLogin;
 	}
-	
-	
 }

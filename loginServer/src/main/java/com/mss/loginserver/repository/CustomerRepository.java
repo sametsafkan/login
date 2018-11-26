@@ -1,17 +1,17 @@
 package com.mss.loginserver.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-import com.mss.loginserver.entity.CustomerEntity;
+import com.mss.loginserver.domain.Customer;
+
+import reactor.core.publisher.Mono;
 
 /**
  * 
  * @author sametsafkan
  *
  */
-@Repository
-public interface CustomerRepository extends CrudRepository<CustomerEntity, Long> {
+public interface CustomerRepository extends ReactiveMongoRepository<Customer, String> {
 
-	public CustomerEntity findByCustomerNumber(Integer customerNumber);
+	Mono<Customer> findByCustomerNumber(Integer customerNumber);
 }

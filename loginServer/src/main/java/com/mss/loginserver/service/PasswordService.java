@@ -1,12 +1,15 @@
 package com.mss.loginserver.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mss.loginserver.entity.CustomerEntity;
+import com.mss.loginserver.domain.Customer;
+import com.mss.loginserver.domain.Password;
 import com.mss.loginserver.repository.CustomerRepository;
+import com.mss.loginserver.repository.PasswordRepository;
 import com.mss.loginserver.request.RequestPasswordCheck;
 import com.mss.loginserver.response.ResponseCheckPassword;
+
+import reactor.core.publisher.Mono;
 
 /**
  * 
@@ -16,26 +19,24 @@ import com.mss.loginserver.response.ResponseCheckPassword;
 @Service
 public class PasswordService {
 	
-	private CustomerRepository customerRepository;
+	private final CustomerRepository customerRepository;
+	private final PasswordRepository passwordRepository;
 	
-	@Autowired
-	public PasswordService(CustomerRepository customerRepository) {
+	public PasswordService(CustomerRepository customerRepository,
+			PasswordRepository passwordRepository) {
 		this.customerRepository = customerRepository;
+		this.passwordRepository = passwordRepository;
 	}
 	
 	public ResponseCheckPassword checkPassword(RequestPasswordCheck request) {
 		ResponseCheckPassword response = new ResponseCheckPassword();
-		CustomerEntity entity = customerRepository.findByCustomerNumber(request.getClientNumber());
-		if(entity == null) {
-			response.setPasswordOk(false);
-			return response;
-		}
-		String pass = entity.getPassword().getPassword();
+		Mono<Customer> entity = customerRepository.findByCustomerNumber(request.getClientNumber());
+		Mono<Password> password = passwordRepository.findById(entity.block().getPasswordId());
+		String pass = password.block().getPassword();
 		if(pass.equals(request.getPassword()))
 			response.setPasswordOk(true);
 		else
 			response.setPasswordOk(false);
 		return response;
 	}
-
 }
